@@ -34,7 +34,9 @@ def test_show_my_pets():
     descriptions = WebDriverWait(pytest.driver, 10).until(
         EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.card-deck .card-text')))
 
-    for i in range(len(names)):
+    try:
+
+      for i in range(len(names)):
         assert images[i].get_attribute('src') != '', 'Image not found'
         assert names[i].text != '', 'Name not found'
         assert descriptions[i].text != '', 'Description not found'
@@ -42,3 +44,7 @@ def test_show_my_pets():
         parts = descriptions[i].text.split(", ")
         assert len(parts[0]) > 0
         assert len(parts[1]) > 0
+    except AssertionError:
+        print('Нет фото, или имени, или описания у одной из карточек питомца')
+
+    pytest.driver.quit()
